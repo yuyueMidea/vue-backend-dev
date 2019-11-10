@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-11-09 19:34:21
- * @LastEditTime: 2019-11-10 17:29:37
- * @LastEditors: your name
+ * @LastEditTime: 2019-11-10 20:31:25
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\router\index.js
  */
@@ -21,10 +21,10 @@ var permissionList = []
 function initRoute(router){
     return new Promise((resolve) => {
         if(permissionList.length == 0){
-            console.log("没有权限数据，正在获取")
+            // console.log("没有权限数据，正在获取")
             store.dispatch('auth/getNavList').then(() => {
                 store.dispatch('auth/getPermissionList').then((res) => {
-                    console.log("权限列表生成完毕")
+                    // console.log("权限列表生成完毕")
                     permissionList = res
                     res.forEach(function(v){
                         let routeItem = router.match(v.path)
@@ -37,7 +37,7 @@ function initRoute(router){
                 })
             })
         } else{
-            console.log("已有权限数据")
+            // console.log("已有权限数据")
             resolve()
         }
     })
@@ -71,7 +71,7 @@ router.beforeEach((to, from, next) => {
         } else {
             initRoute(router).then(() => {
                 let isPermission = false
-                console.log("进入权限判断")
+                // console.log("进入权限判断")
                 permissionList.forEach((v) => {
                     // 判断跳转的页面是否在权限列表中
                     if(v.path == to.fullPath){
@@ -89,10 +89,10 @@ router.beforeEach((to, from, next) => {
     } else {
         // 如果是免登陆的页面则直接进入，否则跳转到登录页面
         if (whiteList.indexOf(to.path) >= 0) {
-            console.log('该页面无需登录即可访问')
+            // console.log('该页面无需登录即可访问')
             next()
         } else {
-            console.warn('当前未处于登录状态，请登录')
+            // console.warn('当前未处于登录状态，请登录')
             next({path: "/login", replace: true})
             // 如果store中有token，同时Cookie中没有登录状态
             if(store.state.user.token){
