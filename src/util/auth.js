@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-11-09 19:34:21
+ * @LastEditTime: 2019-11-10 20:29:19
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \vue-backend-dev\src\util\auth.js
+ */
 import Cookies from 'js-cookie'
 
 const authToken = {
@@ -31,7 +39,7 @@ const authToken = {
     // 设置登录状态
     setLoginStatus: function(){
         // TODO: 设置超时登录时间，在该时间范围内没有任何请求操作则自动删除
-        console.log("登录状态最长时间更新")
+        // console.log("登录状态最长时间更新")
         var maxAge = new Date(new Date().getTime() + 30 * 60 * 1000)
         Cookies.set(this.loginKey, 'true', {
             expires: maxAge
