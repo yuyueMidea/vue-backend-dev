@@ -35,10 +35,12 @@ const actions = {
                     ...userInfo
                 }
             }).then(res => {
-                if(res.login){
+                debugger
+                // if(res.login){
                     commit('setToken', res.token)
-                    commit('user/setName', res.name, { root: true })
-                }
+                    commit('user/setName',userInfo.name, { root: true })
+                    commit('user/setId', userInfo.id, { root: true })
+                // }
                 resolve(res)
             })
         });
@@ -49,6 +51,7 @@ const actions = {
         return new Promise((resolve) => {
             commit('setToken', '')
             commit('user/setName', '', { root: true })
+            commit('user/setId', '', { root: true })
             commit('tagNav/removeTagNav', '', {root: true})
             resolve()
         })
@@ -60,7 +63,8 @@ const actions = {
         return new Promise((resolve) => {
             // 根据Token进行重新登录
             let token = Cookies.get('token'),
-                userName = Cookies.get('userName')
+                userName = Cookies.get('userName'),
+                userId = Cookies.get('userId')
 
             // 重新登录时校验Token是否存在，若不存在则获取
             if(!token){
@@ -72,6 +76,7 @@ const actions = {
             }
             // 刷新/关闭浏览器再进入时获取用户名
             commit('user/setName', decodeURIComponent(userName), { root: true })
+            commit('user/setId', decodeURIComponent(userId), { root: true })
             resolve()
         })
     },
