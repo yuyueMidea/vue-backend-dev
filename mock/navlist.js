@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-03-14 13:59:41
+ * @LastEditTime: 2019-11-12 09:01:45
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \vue-backend-dev\mock\navlist.js
+ */
 var data = [
     {
         path: '/home',
@@ -61,6 +69,14 @@ var data = [
             {
                 path: '/example/table',
                 name: '列表页面',
+                permission: ['edit']
+            },{
+                path: '/example/promoList',
+                name: '活動页面',
+                permission: ['edit']
+            },{
+                path: '/example/userList',
+                name: '用戶页面',
                 permission: ['edit']
             },
             {
