@@ -83,9 +83,16 @@ const staticRoute = [
         path: '/example',
         component: Layout,
         children: [
+            
             {
                 path: 'table',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/table')
+            },{
+                path: 'promoList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/promoList')
+            },{
+                path: 'userList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/userList')
             },
             {
                 path: 'charts',
