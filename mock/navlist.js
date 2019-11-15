@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-03-14 13:59:41
- * @LastEditTime: 2019-11-12 09:01:45
+ * @LastEditTime: 2019-11-13 10:59:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\mock\navlist.js
@@ -64,19 +64,31 @@ var data = [
         ]
     },
     {
-        name: '完整示例',
+        name: '完整示例',//
         child: [
             {
                 path: '/example/table',
-                name: '列表页面',
+                name: '商品一览页面',
+                permission: ['edit']
+            },{
+                path: '/example/itemList',
+                name: '商品活动',
+                permission: ['edit']
+            },{
+                path: '/example/dictList',
+                name: '数据字典',
                 permission: ['edit']
             },{
                 path: '/example/promoList',
-                name: '活動页面',
+                name: '促销一览页面',
                 permission: ['edit']
             },{
-                path: '/example/userList',
-                name: '用戶页面',
+                path: '/example/orderList',
+                name: '订单一览页面',
+                permission: ['edit']
+            },{
+                path: '/example/xiaoquList',
+                name: '小区一览页面',
                 permission: ['edit']
             },
             {
