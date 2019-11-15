@@ -88,11 +88,20 @@ const staticRoute = [
                 path: 'table',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/table')
             },{
+                path: 'itemList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/itemList')
+            },{
+                path: 'dictList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/dictList')
+            },{
                 path: 'promoList',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/promoList')
             },{
-                path: 'userList',
-                component: () => import(/* webpackChunkName: 'example' */ '../page/example/userList')
+                path: 'orderList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/orderList')
+            },{
+                path: 'xiaoquList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/xiaoquList')
             },
             {
                 path: 'charts',
