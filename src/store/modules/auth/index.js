@@ -35,7 +35,6 @@ const actions = {
                     ...userInfo
                 }
             }).then(res => {
-                debugger
                 // if(res.login){
                     commit('setToken', res.token)
                     commit('user/setName',userInfo.name, { root: true })

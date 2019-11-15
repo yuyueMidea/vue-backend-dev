@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-11-09 19:34:21
- * @LastEditTime: 2019-11-10 20:31:25
+ * @LastEditTime: 2019-11-15 11:48:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\router\index.js
@@ -59,7 +59,6 @@ router.beforeEach((to, from, next) => {
     NProgress.start();
     
     // 判断用户是否处于登录状态
-    // debugger
     if (Auth.isLogin()) {
         // 如果当前处于登录状态，并且跳转地址为login，则自动跳回系统首页
         // 这种情况出现在手动修改地址栏地址时

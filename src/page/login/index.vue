@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-11-09 19:34:21
- * @LastEditTime: 2019-11-14 16:06:59
+ * @LastEditTime: 2019-11-15 11:46:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\login\index.vue
@@ -137,7 +137,6 @@ export default {
             })
         },
         submitForm(){
-            debugger
             if(!this.loginForm.telphone || !this.loginForm.password){
                 return this.$message.error(`登录失败，用户名或密码错误！`)
             }
@@ -145,7 +144,6 @@ export default {
             param.append("telphone", this.loginForm.telphone)
             param.append("password", this.loginForm.password)
             this.$post("http://localhost:8080/user/login", param).then(res=>{
-                debugger
                 if(res.status == "success"){
                     this.login({
                         name: this.loginForm.telphone,

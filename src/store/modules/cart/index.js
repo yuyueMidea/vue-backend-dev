@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-12 10:45:10
+ * @LastEditTime: 2019-11-15 11:47:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\store\modules\user\index.js
@@ -14,7 +14,6 @@ const state = {
 
 const mutations = {
     setOrderList: (state, data) => {
-        // debugger
         state.orderList.push(data)
     },
 }
