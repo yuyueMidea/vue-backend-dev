@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-11-09 19:34:21
- * @LastEditTime: 2019-11-11 10:49:07
+ * @LastEditTime: 2019-11-14 16:06:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\login\index.vue
@@ -9,6 +9,7 @@
 <template>
     <div class="sys-login">
         <div class="login-area">
+            <h2>注册时页面上的项目必填，登录时只需要手机号和密码</h2>
             <div class="form-group">
                 <el-form :model="loginForm"  ref="loginForm" label-position="left" label-width="0px">
                     <el-form-item prop="name">
@@ -17,7 +18,7 @@
                     <el-form-item prop="age">
                         <el-input v-model="loginForm.age" type="text" :placeholder="$t('global.age')"></el-input>
                     </el-form-item>
-                    <el-form-item prop="age" style="background: #fff;">
+                    <el-form-item prop="age" style="background: #fff;padding-left:15px">
                         <el-radio v-model="loginForm.gender" label="1">男</el-radio>
                         <el-radio v-model="loginForm.gender" label="2">女</el-radio>
                     </el-form-item>
@@ -136,6 +137,7 @@ export default {
             })
         },
         submitForm(){
+            debugger
             if(!this.loginForm.telphone || !this.loginForm.password){
                 return this.$message.error(`登录失败，用户名或密码错误！`)
             }
@@ -143,10 +145,12 @@ export default {
             param.append("telphone", this.loginForm.telphone)
             param.append("password", this.loginForm.password)
             this.$post("http://localhost:8080/user/login", param).then(res=>{
+                debugger
                 if(res.status == "success"){
                     this.login({
                         name: this.loginForm.telphone,
-                        password: this.loginForm.password
+                        password: this.loginForm.password,
+                        id: res.data.id
                     }).then(res => {
                         this.$message.success(`登录成功！`)
                         this.$router.push('home')
