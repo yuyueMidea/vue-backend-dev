@@ -1,19 +1,24 @@
 /*
  * @Author: your name
- * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-12 10:35:03
+ * @Date: 2019-11-15 10:17:03
+ * @LastEditTime: 2019-11-15 11:23:50
  * @LastEditors: your name
  * @Description: In User Settings Edit
- * @FilePath: \vue-backend-dev\src\store\modules\index.js
+ * @FilePath: \vue-backend-dev\src\store\index.js
  */
-import cart from './cart'
-import user from './user'
-import auth from './auth'
-import tagNav from './tagNav'
+import Vue from 'vue'
+import Vuex from 'vuex'
+import vuexModules from './modules'
 
-export default {
-    cart: cart,
-    user: user,
-    auth: auth,
-    tagNav: tagNav
-}
+import state from './state'
+import mutations from './mutations'
+import actions from './actions'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+    state,
+    mutations,
+    actions,
+    modules: vuexModules
+})
