@@ -1,58 +1,81 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-12 11:34:41
+ * @LastEditTime: 2019-11-11 17:41:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
  -->
 <template>
     <div class="sys-page">
+        <div>
             <p>
-                <el-input v-model="searchtext" style="width:22%" placeholder="请输入查询条件"></el-input>
+                <el-input v-model="itemName" style="width:15%" placeholder="请输入itemName"></el-input>
+                <el-input v-model="promoName" style="width:15%" placeholder="请输入promoName"></el-input>
+                 <el-date-picker v-model="startDate" style="width:30%" type="datetimerange"  
+                 value-format="yyyy-MM-dd hh:mm:ss"  placeholder="选择日期时间" />
+                 <el-date-picker v-model="endDate" style="width:30%" type="datetimerange"
+                 value-format="yyyy-MM-dd hh:mm:ss"  placeholder="选择日期时间" />
                 <el-button type="primary" @click="getTableData">查询</el-button>
-                <!-- <el-button type="primary" @click="addNew">新增</el-button>
-                <el-button type="primary" @click="editOne">修改</el-button>
-                <el-button type="primary" @click="deleteRow">删除</el-button> -->
+                
             </p>
-        <!-- 列表体 -->
-            <ul class="the_promoList">
-                <li v-for="(item,index) in tableData" :key="index">
-                    <img :src="item.imgUrl" :alt="item.description" :title="item.description" @click="editOne(item)">
-                    <span>{{item.title}}</span>
-                </li>
-            </ul>
+            <p>
+                <el-button type="primary" @click="addNew">新增</el-button>
+                <el-button type="primary" @click="editOne">修改</el-button>
+                <el-button type="primary" @click="deleteRow">删除</el-button>
+            </p>
+        </div>
+            <el-table :data="tableData" border stripe  @selection-change="checkChange">
+                <el-table-column width="50" type="selection" />
+                <el-table-column type="index" width="50"/>
+                <el-table-column prop="itemName" label="商品名稱" sortable width="250" :show-overflow-tooltip="true"/>
+                <el-table-column prop="promoName" label="活動名稱" sortable :show-overflow-tooltip="true"/>
+                <el-table-column prop="promoItemPrice" label="活動價格" sortable :show-overflow-tooltip="true"/>
+                <el-table-column prop="startDate" label="開始時間" sortable width="200" :show-overflow-tooltip="true"/>
+                <el-table-column prop="endDate" label="結束時間" sortable width="200" :show-overflow-tooltip="true"/>
+            </el-table>
               
-        <el-dialog title="商品詳情頁面" :visible.sync="dialogTableVisible" width="800px" :close-on-press-escape=false :close-on-click-modal=false>
-            <div class="the_sub_form">
-                <div>
-                    <img :src="form.imgUrl" alt="">
-                        
-                </div>
-                <p>标题:{{form.title}}</p>
-                <p>描述:{{form.description}}</p>
-                
-                <p><span style="color:red">价格:{{form.price}}</span><span>库存:{{form.stock}}</span></p>
-                <p>
-                    <span>數量</span><el-input-number style="width:20%" v-model="itemQty" :min="1" :max="10"/>
-                    <span style="width:120px;display:inline-block;color:red;">總價{{pricePotal}}</span>
-                    <el-button type="primary" @click="addCart">加入購物車</el-button>
-                    <el-badge :value="orderList.length" class="item" style="float:right;margin-right: 111px;">
-                        <el-popover
-                            placement="top"
-                            title="购物车信息"  width="300" trigger="click" >
-                            <el-table :data="orderList" border stripe>
-                                <el-table-column width="150" property="title" label="商品名称"></el-table-column>
-                                <el-table-column width="50" property="itemQty" label="数量"></el-table-column>
-                                <el-table-column width="80" property="price" label="价格"></el-table-column>
-                            </el-table>
-                            <el-button slot="reference">購物車</el-button>
-                        </el-popover>
-                        </el-badge>
-                </p>
-                
-            </div>
-    
+        <el-dialog title="新增商品" :visible.sync="dialogTableVisible" width="800px" :close-on-press-escape=false :close-on-click-modal=false>
+        <el-form ref="form" :model="form" label-width="80px" class="the_sub_form">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="itemId" :label-width="formLabelWidth"><el-input-number v-model="form.itemId"/></el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="ID" :label-width="formLabelWidth"><el-input v-model="form.id" disabled/></el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="活動價格" :label-width="formLabelWidth"><el-input-number v-model="form.promoItemPrice"/></el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="活動名稱" :label-width="formLabelWidth"><el-input v-model="form.promoName"/></el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="開始時間" :label-width="formLabelWidth">
+                  <el-date-picker v-model="form.startDate" type="datetime"  
+                    value-format="yyyy-MM-dd hh:mm:ss"  placeholder="选择開始時間" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="結束時間" :label-width="formLabelWidth">
+                  <el-date-picker v-model="form.endDate" type="datetime"  
+                    value-format="yyyy-MM-dd hh:mm:ss"  placeholder="选择結束時間" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row style="padding-right: 100px;margin-top: 19px;">
+            <el-col :span="24">
+              <el-form-item label="" label-width="200px">
+                <el-button @click="dialogTableVisible = false" size="small" style="width: 100px">取消</el-button>
+                <el-button type="primary" @click="insertOne" size="small" style="width: 100px">確定</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
       </el-dialog>
       <p>
           <el-pagination @size-change="handleSizeChange"
@@ -68,43 +91,38 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
     name: 'exampleTable',
     data() {
         return {
-            
-            itemQty: 1,
-            // pricePotal:'',
             dialogTableVisible: false,
             formLabelWidth:'100px',
+                
             form:{
                 id:'',
-                title:'',
-                imgUrl:'',
-                description:'',
-                price:'',
-                stock:'',
+                itemId:'',
+                itemName:'',
+                promoName:'',
+                promoItemPrice:'',
+                startDate:'',
+                endDate:'',
             },
+            "promoName": "",
+            "startDate": "",
+            "endDate": "",
+            "itemName": "",
+
             searchtext:'',
             tableData:  [],
             checkedData:'',
             currentPage2: 1,
         }
     },
-    computed:{
-        pricePotal: function(){
-            return this.itemQty * (this.form.price ||'0')
-        },
-        ...mapState({
-            orderList: state => state.cart.orderList,
-        })
-    },
     mounted() {
         this.getTableData()
     },
     methods: {
+        
         handleSizeChange(val){
             console.log(`每页 ${val} 条`);
             debugger
@@ -113,39 +131,52 @@ export default {
             console.log(`当前页: ${val}`);
             debugger
         },
-        addCart(){
-            let res ={
-                itemId: this.checkedData.id,
-                itemQty: this.itemQty,
-                price: this.form.price,
-                title: this.form.title,
-                pricePotal: this.pricePotal,
-            }
-            this.$store.commit("cart/setOrderList", res)
-            this.$message.success(`商品加入购物车成功！`) 
-        },
-       
-        addNew(){
-            
-            this.form={
-                id:'',
-                title:'',
-                imgUrl:'',
-                description:'',
-                price:'',
-                stock:'',
-            }
-            this.dialogTableVisible = true;
-        },
-        editOne(val){
-            // console.log('tag---  ', this.orderList)
-            // debugger
-            this.itemQty =1
-            for(let i in this.form){
-                this.form[i] = val[i]
-            }
+        checkChange(val) {
             this.checkedData = val;
+        },
+        addNew(){
+            this.form ={
+                id:'',
+                itemId:'',
+                itemName:'',
+                promoName:'',
+                promoItemPrice:'',
+                startDate:'',
+                endDate:'',
+            },
             this.dialogTableVisible = true;
+        },
+        editOne(){
+            if(this.checkedData.length !==1) {
+                return this.$message.info(`请选择一条数据！`)
+            }
+            for(let i in this.form){
+                this.form[i] = this.checkedData[0][i]
+            }
+            this.dialogTableVisible = true;
+        },
+        insertOne(){
+            if(!this.form.itemId || !this.form.promoName|| !this.form.startDate ||!this.form.endDate){
+                return this.$message.info(`请输入必填的数据！`)
+            }
+            let param = new URLSearchParams()
+            param.append("id", this.form.id)
+            param.append("itemId", this.form.itemId)
+            param.append("promoItemPrice", this.form.promoItemPrice)
+            param.append("promoName", this.form.promoName)
+            param.append("startDate", this.form.startDate)
+            param.append("endDate", this.form.endDate)
+            
+            this.$post("http://localhost:8080/promo/create",param).then(res => {
+                if(res.status=='success'){
+                    this.$message.success(`数据保存成功`)
+                    this.dialogTableVisible = false;
+                    this.getTableData()
+                }
+                 
+            }).catch(err => {
+                this.$message.error(`获取数据失败，失败码：${err}`)
+            })
         },
         deleteRow(){
             if(this.checkedData.length!==1){
@@ -157,13 +188,14 @@ export default {
                 cancelButtonText: '取消'
             })
             .then(() => {
-                let url= "http://localhost:8080/item/delete"
+                let url= "http://localhost:8080/promo/delete"
                 let param = new URLSearchParams()
                 param.append("idList", this.checkedData[0].id)
                 this.$post(url, param).then(res=>{
-                    // console.log(res.data)
-                    this.getTableData()
-                    return this.$message.success(`删除数据成功！`)
+                    if(res.status=='success'){
+                        this.getTableData()
+                        return this.$message.success(`删除数据成功！`)
+                    }
                 }).catch(err=>{
                     console.log(err)
                     this.$message.error(`删除数据失败`)
@@ -171,34 +203,22 @@ export default {
             })
             
         },
-        insertOne(){
-            let param = new URLSearchParams()
-            for(let i in this.form){
-                param.append(i, this.form[i]||'')
-            }
-            if(!param.toString()){
-                return this.$message.info(`请输入必填的数据！`)
-            }
-            this.$post("http://localhost:8080/item/create",
-                param
-            ).then(res => {
-                // console.log('create--->', res)
-                 this.$message.success(`数据保存成功`)
-                 this.dialogTableVisible = false;
-                 this.getTableData()
-            }).catch(err => {
-                this.$message.error(`获取数据失败，失败码：${err}`)
-            })
-        },
         // 获取table数据
         getTableData() {
             let param = new URLSearchParams()
-            param.append('title', this.searchtext )
-            this.$post("http://localhost:8080/item/list",
+            param.append('itemName', this.itemName )
+            param.append('promoName', this.promoName )
+            param.append('startDateBegin', this.startDate ? this.startDate[0]:'' )
+            param.append('startDateEnd', this.startDate ? this.startDate[1]:'' )
+            param.append('endDateBegin', this.endDate ? this.endDate[0]:'' )
+            param.append('endDateEnd', this.endDate ? this.endDate[1] :'' )
+
+            this.$post("http://localhost:8080/promo/list",
                 param
             ).then(res => {
-                // console.log('tableData---', res)
-                this.tableData = res.data
+                if(res.status=='success'){
+                    this.tableData = res.data
+                }
             }).catch(err => {
                 this.$message.error(`获取数据失败，失败码：${err.response.status}`)
             })
@@ -206,29 +226,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.the_promoList{
-    padding: 3px; overflow: hidden
-}
-.the_promoList>li{
-    float: left; width: 250px; height: 220px;overflow: hidden;
-    border: 1px solid #ccc; padding: 3px; margin: 5px
-}
-.the_promoList>li img{
-    width: 240px; height: 180px; cursor: pointer
-}
-.the_promoList>li span{
-    line-height: 40px;margin-left: 11px;
-}
-.the_sub_form{
-    height: 444px;
-    border: 1px solid #ccc; padding: 3px; margin: 5px
-}
-.the_sub_form img{
-    width: 400px; height: 300px;border: 1px solid #ccc;
-}
-.the_sub_form .the_cart{
-    float: right; width: 111px; height: 111px;
-    border: 1px solid #ccc;
-}
-</style>
