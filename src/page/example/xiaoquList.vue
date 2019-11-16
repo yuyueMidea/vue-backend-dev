@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-14 16:44:08
+ * @LastEditTime: 2019-11-16 11:18:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -50,6 +50,26 @@
                 <el-input v-model="search.xiaoqu" style="width:18%" placeholder="请输入小区"/>
                 <el-input v-model="search.price" style="width:18%" placeholder="请输入价格"/>
             </p>
+            <div class="the_translate">
+                <p>
+                    <el-input v-model="enword" style="width:22%">
+                          <el-button
+                            slot="append"
+                            icon="el-icon-edit-outline"
+                            type="primary"
+                            @click="getTranslateData">翻译</el-button>
+                        </el-input>
+                <el-select v-model="translateData" style="width:18%" placeholder="请选择" clearable>
+                    <el-option
+                    v-for="item in TranslateList"
+                    :key="item.id"
+                    :value="item.word">
+                        <span style="width:100px;display: inline-block;">{{item.word}}</span>
+                        <span>{{item.translation}}</span>
+                    </el-option>
+                </el-select>
+                </p>
+            </div>
             <p>
                 <el-button type="primary" @click="getTableData">查询</el-button>
                 <el-button type="primary" @click="addNew">新增</el-button>
@@ -158,6 +178,9 @@ export default {
             tableData:  [],
             checkedData:'',
             currentPage2: 1,
+            enword:'',
+            translateData:'',
+            TranslateList:[]
         }
     },
     mounted() {
@@ -165,7 +188,16 @@ export default {
         this.getProvinceData()
     },
     methods: {
-        
+        getTranslateData(){
+            // debugger//this.enword
+            this.$post("http://localhost:8080/enwords/list", {word: this.enword}).then(res=>{
+                    if(res.status=='success'){
+                        this.TranslateList = res.data
+                        // debugger
+                        this.translateData = this.enword
+                    }
+            })
+        },
         handleSizeChange(val){
             console.log(`每页 ${val} 条`);
             debugger
@@ -313,3 +345,10 @@ export default {
     }
 }
 </script>
+<style scoped>
+.the_translate{
+    width: 98%; border: 1px solid #ccc;
+    padding: 5px 0px; position: relative;
+}
+
+</style>
