@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-16 16:40:12
+ * @LastEditTime: 2019-11-16 17:09:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -9,6 +9,9 @@
 <template>
     <div class="sys-page">
         <p>GitHub接口系列</p>
+        <p>
+            <el-button  type="primary" @click="openAPI">打开GitHub相关的API</el-button>
+        </p>
         <p>
             <el-input v-model="user" style="width:22%">
                           <el-button slot="append" icon="el-icon-edit-outline" type="primary"
@@ -43,6 +46,7 @@
                 <a :href="v.html_url" target="_blank">{{v.full_name}}</a>
                 <span>{{v.description}}</span>
                 <span :title="v.login">{{v.login}}</span>
+                <span style="color:green">[start---{{v.stargazers_count}}]</span>
             </li>
         </ul>
         <!-- 表格体 -->
@@ -80,7 +84,9 @@ export default {
     },
     methods: {
        
-       
+       openAPI(){
+           window.open('https://api.github.com/')
+       },
         // 获取user数据
         getuserData() {
             if(!this.user) return
@@ -111,20 +117,14 @@ export default {
             })
         },
         handleSizeChange(val){
-            console.log(`每页 ${val} 条`);
             this.per_page =val;
             this.getuserData()
             this.getReposData()
-            // debugger
-            
         },
         handleCurrentChange(val){
-            console.log(`当前页: ${val}`);
             this.currentPage2 =val
             this.getuserData()
             this.getReposData()
-            // debugger
-            
         },
     }
 }
