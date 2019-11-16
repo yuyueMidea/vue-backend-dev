@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-16 15:50:06
+ * @LastEditTime: 2019-11-16 16:40:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -13,6 +13,10 @@
             <el-input v-model="user" style="width:22%">
                           <el-button slot="append" icon="el-icon-edit-outline" type="primary"
                             @click="getuserData">获取用户</el-button>
+                    </el-input>
+                    <el-input v-model="repository" style="width:22%">
+                          <el-button slot="append" icon="el-icon-edit-outline" type="primary"
+                            @click="getReposData">获取仓库</el-button>
                     </el-input>
         <!-- </p>
         <p> -->
@@ -30,6 +34,14 @@
                 <a :href="v.html_url" target="_blank">
                     <img :src="v.avatar_url" alt="">
                 </a>
+                <span :title="v.login">{{v.login}}</span>
+            </li>
+        </ul>
+        <hr>
+        <ul class="the_git_repo">
+            <li v-for="(v,k) in reposListData" :key="k">
+                <a :href="v.html_url" target="_blank">{{v.full_name}}</a>
+                <span>{{v.description}}</span>
                 <span :title="v.login">{{v.login}}</span>
             </li>
         </ul>
@@ -54,8 +66,10 @@ export default {
     data() {
         return {
             user: '',
+            repository:'',
             per_page: 10,
             userListData:  [],
+            reposListData:[],
             tableData:  [],
             currentPage2: 1,
             allTotal: 0,
@@ -80,11 +94,27 @@ export default {
                 this.userListData = res.items
                 this.allTotal = res.total_count;
             })
+        }, 
+        // 获取user数据
+        getReposData() {
+            debugger
+            if(!this.repository) return
+            let obj ={
+                q: this.repository,
+                page: this.currentPage2,
+                per_page: this.per_page
+            }
+            this.$get("https://api.github.com/search/repositories", obj).then(res => {
+                // debugger
+                this.reposListData = res.items
+                this.allTotal = res.total_count;
+            })
         },
         handleSizeChange(val){
             console.log(`每页 ${val} 条`);
             this.per_page =val;
             this.getuserData()
+            this.getReposData()
             // debugger
             
         },
@@ -92,6 +122,7 @@ export default {
             console.log(`当前页: ${val}`);
             this.currentPage2 =val
             this.getuserData()
+            this.getReposData()
             // debugger
             
         },
@@ -111,5 +142,10 @@ export default {
 }
 .the_git_user li a img{
     width: 90px; height: 80px;
+}
+.the_git_repo li{
+    float: left; width: 48%; height: 45px;
+    border: 1px solid #ccc; padding: 5px; margin: 3px;
+    overflow: hidden
 }
 </style>
