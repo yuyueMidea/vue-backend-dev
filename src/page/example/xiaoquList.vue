@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-16 11:18:30
+ * @LastEditTime: 2019-11-16 14:54:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -53,12 +53,9 @@
             <div class="the_translate">
                 <p>
                     <el-input v-model="enword" style="width:22%">
-                          <el-button
-                            slot="append"
-                            icon="el-icon-edit-outline"
-                            type="primary"
+                          <el-button slot="append" icon="el-icon-edit-outline" type="primary"
                             @click="getTranslateData">翻译</el-button>
-                        </el-input>
+                    </el-input>
                 <el-select v-model="translateData" style="width:18%" placeholder="请选择" clearable>
                     <el-option
                     v-for="item in TranslateList"

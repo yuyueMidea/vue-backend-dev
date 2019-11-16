@@ -102,6 +102,9 @@ const staticRoute = [
             },{
                 path: 'xiaoquList',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/xiaoquList')
+            },{
+                path: 'gituserList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/gituserList')
             },
             {
                 path: 'charts',

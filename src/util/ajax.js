@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-11-09 19:34:21
- * @LastEditTime: 2019-11-09 19:49:27
- * @LastEditors: your name
+ * @LastEditTime: 2019-11-16 14:11:17
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\util\ajax.js
  */
