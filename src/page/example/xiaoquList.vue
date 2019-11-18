@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-16 14:54:45
+ * @LastEditTime: 2019-11-18 14:06:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -132,9 +132,9 @@
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage2"
             :page-sizes="[10, 20, 60, 100]"
-            :page-size="100"
+            :page-size="10"
             layout="sizes, prev, pager, next"
-            :total="1000"/>
+            :total="alltotal"/>
       </p>
 
     </div>
@@ -161,8 +161,11 @@ export default {
                 district:'',
                 area:'',
                 price:'',
-                xiaoqu:''
+                xiaoqu:'',
+                page: 1,
+                pageSize:10
             },
+            alltotal: 0,
             form:{
                 "id": '',
                 "catalog": '',
@@ -181,27 +184,27 @@ export default {
         }
     },
     mounted() {
-        // this.getTableData()
+        this.getAlltotal()
         this.getProvinceData()
     },
     methods: {
         getTranslateData(){
-            // debugger//this.enword
             this.$post("http://localhost:8080/enwords/list", {word: this.enword}).then(res=>{
                     if(res.status=='success'){
                         this.TranslateList = res.data
-                        // debugger
                         this.translateData = this.enword
                     }
             })
         },
         handleSizeChange(val){
             console.log(`每页 ${val} 条`);
-            debugger
+            this.search.pageSize =val
+            this.getTableData()
         },
         handleCurrentChange(val){
             console.log(`当前页: ${val}`);
-            debugger
+            this.search.page =val
+            this.getTableData()
         },
         checkChange(val) {
             this.checkedData = val;
@@ -242,12 +245,8 @@ export default {
                 let param = new URLSearchParams()
                 param.append("idList", this.checkedData[0].id)
                 this.$post("http://localhost:8080/dict/delete", param).then(res=>{
-                    // console.log(res.data)
                     this.getTableData()
                     return this.$message.success(`删除数据成功！`)
-                }).catch(err=>{
-                    console.log(err)
-                    this.$message.error(`删除数据失败`)
                 })
             })
             
@@ -268,20 +267,21 @@ export default {
                 } else {
                     return this.$message.error(`数据保存失败`)
                 }
-            }).catch(err => {
-                this.$message.error(`数据保存失败，失败码：${err}`)
             })
         },
         // 获取table数据
         getTableData() {
             this.$post("http://localhost:8080/xiaoqu/list",this.search).then(res => {
                 if(res.status=='success'){
-                    console.log('tableData---', res)
-                    debugger
                     this.tableData = res.data
                 }
-            }).catch(err => {
-                this.$message.error(`获取数据失败，失败码：${err.response.status}`)
+            })
+        },
+        getAlltotal() {
+            this.$post("http://localhost:8080/xiaoqu/listCount",this.search).then(res => {
+                if(res.status=='success'){
+                    this.alltotal = res.data
+                }
             })
         },
         // 获取province数据----1111
