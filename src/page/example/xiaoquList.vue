@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-18 14:06:35
+ * @LastEditTime: 2019-11-18 16:22:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -197,12 +197,10 @@ export default {
             })
         },
         handleSizeChange(val){
-            console.log(`每页 ${val} 条`);
             this.search.pageSize =val
             this.getTableData()
         },
         handleCurrentChange(val){
-            console.log(`当前页: ${val}`);
             this.search.page =val
             this.getTableData()
         },

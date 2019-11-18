@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-03-14 13:59:41
- * @LastEditTime: 2019-11-16 15:00:28
+ * @LastEditTime: 2019-11-18 15:19:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\mock\navlist.js
@@ -84,7 +84,7 @@ var data = [
                 permission: ['edit']
             },{
                 path: '/example/orderList',
-                name: '订单一览页面',
+                name: '电影一览页面',
                 permission: ['edit']
             },{
                 path: '/example/xiaoquList',

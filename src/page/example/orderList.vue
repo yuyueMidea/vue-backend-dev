@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2019-03-14 14:00:10
- * @LastEditTime: 2019-11-13 10:57:47
+ * @LastEditTime: 2019-11-18 16:29:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\src\page\example\table.vue
@@ -9,92 +9,96 @@
 <template>
     <div class="sys-page">
             <p>
-                <el-input v-model="searchtext" style="width:22%" placeholder="请输入查询条件"></el-input>
+                <el-input v-model="searchtext" style="width:22%" placeholder="请输入电影名"></el-input>
                 <el-button type="primary" @click="getTableData">查询</el-button>
-                <el-button type="primary" @click="addNew">新增</el-button>
-                <el-button type="primary" @click="editOne">修改</el-button>
-                <el-button type="primary" @click="deleteRow">删除</el-button>
             </p>
-        <!-- 表格体 -->
-            <el-table :data="tableData" border stripe  @selection-change="checkChange" highlight-current-row>
-                <el-table-column width="50" type="selection" />
-                <el-table-column type="index" width="50"/>
-                <el-table-column prop="id" label="ID" sortable width="70" />
-                <el-table-column prop="name" label="名称" sortable />
-                <el-table-column prop="value" label="值" sortable />
-                <el-table-column prop="state" label="状态" sortable />
-                <el-table-column prop="catalog" label="类别" sortable />
-                <el-table-column prop="memo" label="备注" sortable />
-            </el-table>
-
-        <el-dialog title="新增商品" :visible.sync="dialogTableVisible" width="800px" :close-on-press-escape=false :close-on-click-modal=false>
-        <el-form ref="form" :model="form" label-width="80px" class="the_sub_form">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="名称" :label-width="formLabelWidth"><el-input v-model="form.name"/></el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="值" :label-width="formLabelWidth"><el-input v-model="form.value"/></el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="备注" :label-width="formLabelWidth"><el-input v-model="form.memo"/></el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="form.state" placeholder="请选择">
-                        <el-option label="0" value="0"/>
-                        <el-option label="1" value="1"/>
-                    </el-select>
-                </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="类别" :label-width="formLabelWidth"><el-input v-model="form.catalog"/></el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="ID" :label-width="formLabelWidth"><el-input v-model="form.id" disabled/></el-form-item>
-            </el-col>
-          </el-row>
-          <el-row style="padding-right: 100px;margin-top: 19px;">
-            <el-col :span="24">
-              <el-form-item label="" label-width="200px">
-                <el-button @click="dialogTableVisible = false" size="small" style="width: 100px">取消</el-button>
-                <el-button type="primary" @click="insertOne" size="small" style="width: 100px">確定</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
+            <p>
+                <el-pagination @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage2"
+                    :page-sizes="[10, 20, 60, 100]"
+                    :page-size="10"
+                    layout="sizes, prev, pager, next"
+                    :total="alltotal"/>
+            </p>
+        <!-- 列表体 -->
+            <ul class="the_movie_List">
+                <li v-for="(item,index) in tableData" :key="index">
+                    <img :src="item.image" :alt="item.name" :title="item.name" @click="editOne(item)">
+                    <p>
+                        <a :href="item.href" target="_blank">{{item.name}}评分{{item.score}}</a>
+                    </p>
+                    
+                </li>
+            </ul>
+              
+        <el-dialog v-dialogDrag title="电影詳情頁面" :visible.sync="dialogTableVisible" width="800px" :close-on-press-escape=false :close-on-click-modal=false>
+            <div class="the_sub_form">
+                <div class="left">
+                    <img :src="form.image" alt="">
+                </div>
+                <div class="right">
+                    <p style="font-size:18px;font-weight:700">标题:{{form.name}}</p>
+                    <p>评分:{{form.score}}</p>
+                    <p><span style="color:red;width:111px;display:inline-block;">价格:￥{{form.price}}</span></p>
+                    <p>
+                        <span>數量</span><el-input-number style="width:40%" v-model="itemQty" :min="1" :max="10"/>
+                        <span style="width:120px;display:inline-block;color:red;">總價{{pricePotal}}</span>
+                    </p>
+                    <p>
+                        
+                        
+                        <el-button type="primary" @click="addCart">加入購物車</el-button>
+                        <el-badge :value="orderList.length" class="item" style="float:right;margin-right: 111px;">
+                            <el-popover
+                                placement="top"
+                                title="购物车信息"  width="400" trigger="click" >
+                                <el-table :data="orderList" border stripe>
+                                    <el-table-column width="150" property="name" label="商品名称"></el-table-column>
+                                    <el-table-column width="50" property="itemQty" label="数量"></el-table-column>
+                                    <el-table-column width="80" property="price" label="价格">
+                                        <template slot-scope="scope">
+                                            <span>￥{{scope.row.price}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column width="50" property="price" label="删除">
+                                        <template slot-scope="scope">
+                                            <i class="el-icon-delete" style="cursor: pointer;color: red;" @click="delCart(scope.row)"></i>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <el-button slot="reference">購物車</el-button>
+                            </el-popover>
+                            </el-badge>
+                    </p>
+                </div>
+            </div>
+    
       </el-dialog>
-      <p>
-          <el-pagination @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage2"
-            :page-sizes="[10, 20, 60, 100]"
-            :page-size="100"
-            layout="sizes, prev, pager, next"
-            :total="1000"/>
-      </p>
 
     </div>
 </template>
 
 <script>
+import dialogDrag from '@/util/directives'
+import { mapState, mapActions } from 'vuex'
+
 export default {
-    name: 'orderList',
+    name: 'promoTable',
     data() {
         return {
+            itemQty: 1,
             dialogTableVisible: false,
             formLabelWidth:'100px',
+            page: 1,
+            pageSize:10,
+            alltotal: 0,
             form:{
-                "id": '',
-                "catalog": '',
-                "value": '',
-                "name": '',
-                "memo": '',
-                "state": ''
+                id:'',
+                name:'',
+                image:'',
+                score:'',
+                price:'35',
             },
             searchtext:'',
             tableData:  [],
@@ -102,103 +106,105 @@ export default {
             currentPage2: 1,
         }
     },
+    computed:{
+        pricePotal: function(){
+            return this.itemQty * (this.form.price ||'0')
+        },
+        ...mapState({
+            orderList: state => state.cart.orderList,
+        })
+    },
     mounted() {
-        this.getTableData()
+        this.getAlltotal()
     },
     methods: {
-        
+        getAlltotal() {
+            this.$post("http://localhost:8080/movies/listCount", {}).then(res => {
+                if(res.status=='success'){
+                    this.alltotal = res.data
+                }
+            })
+        },
         handleSizeChange(val){
-            console.log(`每页 ${val} 条`);
-            debugger
+            this.pageSize =val
+            this.getTableData()
         },
         handleCurrentChange(val){
-            console.log(`当前页: ${val}`);
-            debugger
+            this.page =val
+            this.getTableData()
         },
-        checkChange(val) {
+        addCart(){
+            let res ={
+                itemId: this.checkedData.id,
+                itemQty: this.itemQty,
+                price: this.form.price,
+                name: this.form.name,
+                pricePotal: this.pricePotal,
+            }
+            this.$store.commit("cart/setOrderList", res)
+            this.$message.success(`商品加入购物车成功！`) 
+        },
+        delCart(val){
+            this.$store.commit("cart/delOrderList", val)
+        },
+        editOne(val){
+            this.itemQty =1
+            for(let i in this.form){
+                this.form[i] = val[i]
+            }
+            this.form.price = this.form.price||35
             this.checkedData = val;
-        },
-        addNew(){
-            this.form= {
-                    "id": '',
-                    "catalog": '',
-                    "value": '',
-                    "name": '',
-                    "memo": '',
-                    "state": ''
-                }
             this.dialogTableVisible = true;
-        },
-        editOne(){
-            if(this.checkedData.length !==1) {
-                return this.$message.info(`请选择一条数据！`)
-            }
-            for(let i in this.form){
-                this.form[i] = this.checkedData[0][i]
-            }
-            this.dialogTableVisible = true;
-        },
-        deleteRow(){
-            if(this.checkedData.length!==1){
-                return this.$message.error(`请选择一条数据`)
-            }
-            if(this.checkedData[0].id ==1|| this.checkedData[0].id==2 ||this.checkedData[0].id==3 || this.checkedData[0].id==4){
-                return this.$message.error(`基础数据，请不要删除！`)
-            }
-            this.$confirm('确认删除吗？', '确认信息', {
-                distinguishCancelAndClose: true,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消'
-            })
-            .then(() => {
-                let param = new URLSearchParams()
-                param.append("idList", this.checkedData[0].id)
-                this.$post("http://localhost:8080/dict/delete", param).then(res=>{
-                    // console.log(res.data)
-                    this.getTableData()
-                    return this.$message.success(`删除数据成功！`)
-                }).catch(err=>{
-                    console.log(err)
-                    this.$message.error(`删除数据失败`)
-                })
-            })
-            
-        },
-        insertOne(){
-            let param = new URLSearchParams()
-            for(let i in this.form){
-                param.append(i, this.form[i]||'')
-            }
-            if(!param.toString()){
-                return this.$message.info(`请输入必填的数据！`)
-            }
-            this.$post("http://localhost:8080/dict/create", param).then(res => {
-                if(res.status=='success'){
-                    this.$message.success(`数据保存成功`)
-                    this.dialogTableVisible = false;
-                    this.getTableData()
-                } else {
-                    return this.$message.error(`数据保存失败`)
-                }
-            }).catch(err => {
-                this.$message.error(`数据保存失败，失败码：${err}`)
-            })
         },
         // 获取table数据
         getTableData() {
-            let param = new URLSearchParams()
-            param.append('catalog', '')
-            param.append('state', '' )
-            this.$post("http://localhost:8080/dict/list",param).then(res => {
-                if(res.status=='success'){
-                    console.log('tableData---', res)
-                    // debugger
-                    this.tableData = res.data
-                }
-            }).catch(err => {
-                this.$message.error(`获取数据失败，失败码：${err.response.status}`)
+            let obj ={
+                name: this.searchtext,
+                page: this.page,
+                pageSize: this.pageSize,
+            }
+            this.$post("http://localhost:8080/movies/list", obj).then(res => {
+                this.tableData = res.data
             })
         },
     }
 }
 </script>
+<style scoped>
+.the_movie_List{
+    padding: 3px; overflow: hidden
+}
+.the_movie_List>li{
+    float: left; width: 270px; height: 400px;overflow: hidden;
+    border: 1px solid #ccc; padding: 3px; margin: 5px
+}
+.the_movie_List>li img{
+    width: 240px; height: 360px; cursor: pointer
+}
+.the_movie_List>li span{
+    line-height: 40px;margin-left: 11px;
+}
+.el-dialog__body{
+    padding-top: 0px !important;
+}
+.the_sub_form{
+    height: 444px;
+    border: 1px solid #ccc; padding: 22px; margin: 5px
+}
+.the_sub_form .left, .the_sub_form .right {
+    width: 48%; float: left;
+}
+.the_sub_form .right {
+    padding: 11px;
+}
+.the_sub_form .right>p{
+    line-height: 50px
+}
+.the_sub_form img{
+    width: 330px; height: 440px;border: 1px solid #ccc;
+}
+.the_sub_form .the_cart{
+    float: right; width: 111px; height: 111px;
+    border: 1px solid #ccc;
+}
+</style>
