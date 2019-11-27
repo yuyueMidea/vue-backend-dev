@@ -83,7 +83,7 @@ const staticRoute = [
         path: '/example',
         component: Layout,
         children: [
-            
+            // companyList
             {
                 path: 'table',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/table')
@@ -105,6 +105,12 @@ const staticRoute = [
             },{
                 path: 'gituserList',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/gituserList')
+            },{
+                path: 'newsList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/newsList')
+            },{
+                path: 'companyList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/companyList')
             },
             {
                 path: 'charts',
