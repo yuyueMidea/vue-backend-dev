@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-03-14 13:59:41
- * @LastEditTime: 2019-11-27 11:50:09
+ * @LastEditTime: 2019-12-02 10:44:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-backend-dev\mock\navlist.js
@@ -101,6 +101,18 @@ var data = [
             },{
                 path: '/example/companyList',
                 name: '公司一览页面',
+                permission: ['edit']
+            },{
+                path: '/example/poetList',
+                name: '唐诗一览页面',
+                permission: ['edit']
+            },{
+                path: '/example/military',
+                name: '军事频道',
+                permission: ['edit']
+            },{
+                path: '/example/rumorlist',
+                name: '谣言一览',
                 permission: ['edit']
             },
             {

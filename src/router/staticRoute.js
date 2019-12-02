@@ -83,7 +83,7 @@ const staticRoute = [
         path: '/example',
         component: Layout,
         children: [
-            // companyList
+            // 
             {
                 path: 'table',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/table')
@@ -111,6 +111,15 @@ const staticRoute = [
             },{
                 path: 'companyList',
                 component: () => import(/* webpackChunkName: 'example' */ '../page/example/companyList')
+            },{
+                path: 'poetList',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/poetList')
+            },{
+                path: 'military',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/military')
+            },{
+                path: 'rumorlist',
+                component: () => import(/* webpackChunkName: 'example' */ '../page/example/rumorlist')
             },
             {
                 path: 'charts',
